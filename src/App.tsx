@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components'
-import RhfToDoForm from './components/RhfToDoForm'
-import ToDoList from './components/ToDoList'
+import RecoilToDoList from './components/RecoilToDoList'
+// import RhfToDoForm from './components/RhfToDoForm'
+// import ToDoList from './components/ToDoList'
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -53,7 +54,8 @@ function App () {
         <>
             <GlobalStyle />
             {/* <ToDoList /> */}
-            <RhfToDoForm />
+            {/* <RhfToDoForm /> */}
+            <RecoilToDoList />
         </>
     )
 }

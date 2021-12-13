@@ -13,6 +13,7 @@ function ToDoList () {
         e.preventDefault()
         const localToDoList = toDoList
         localToDoList.push(toDo)
+        setToDo('')
         setToDoList(localToDoList)
     }
     return (
