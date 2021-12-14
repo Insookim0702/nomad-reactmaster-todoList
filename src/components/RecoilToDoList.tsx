@@ -3,17 +3,18 @@ import CreateToDo from './CreateToDo'
 import ToDoListPresent from './ToDoListPresent'
 
 const Container = styled.div`
-    width: 100%;
+    max-width: 600px;
     margin: 0 auto;
 `
 const Title = styled.h1`
     font-size: 40px;
     color: white;
+    text-align: center;
 `
 function RecoilToDoList () {
     return (
         <Container>
-            <Title>투두리스트</Title>
+            <Title>To Do List</Title>
             <CreateToDo />
             <ToDoListPresent />
         </Container>

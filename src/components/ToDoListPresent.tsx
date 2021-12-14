@@ -1,49 +1,56 @@
-import { useRecoilValue, useRecoilState } from 'recoil'
+import React from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import styled from 'styled-components'
-import { AtomToDoList } from './CreateToDo'
+import { atomToDoList, Categories, selectCategory, selectedList } from '../Atom'
+
 const ToDoListWrap = styled.ul`
     color: whitesmoke;
-    font-size: 50px;
 `
+
 const ToDo = styled.li``
 function ToDoListPresent () {
-    // const toDoList = useRecoilValue(AtomToDoList)
-    const [toDoList, setToDoList] = useRecoilState(AtomToDoList)
-    function changeCategory (id: number, category: string) {
+    const [toDoList, setToDoList] = useRecoilState(atomToDoList)
+    function changeCategory (id: number, category: Categories) {
+        const deepCopyToDoList = JSON.parse(JSON.stringify(toDoList))
         const toDoIndex = toDoList.findIndex(todo => todo.id === id)
         const newToDo = JSON.parse(JSON.stringify(toDoList[toDoIndex]))
         newToDo.category = category
-        console.log('newToDo', newToDo)
+        deepCopyToDoList.splice(toDoIndex, 1, newToDo)
 
-        const newToDoList = JSON.parse(JSON.stringify(toDoList))
-        newToDoList.splice(toDoIndex, 1, newToDo)
-
-        setToDoList(newToDoList)
-        console.log(toDoList)
+        setToDoList(deepCopyToDoList)
     }
+    const selectedCategory = useRecoilValue(selectCategory)
+    const showList = useRecoilValue(selectedList)
     return (
         <>
             <ToDoListWrap>
-                {toDoList.map(toDo => (
-                    <ToDo key={toDo.id}>
-                        {JSON.stringify(toDo)}
-                        {toDo.category === 'DONE' ? null : (
+                <h1>{selectedCategory}</h1>
+                {showList.map(item => (
+                    <ToDo key={item.id}>
+                        {JSON.stringify(item)}
+                        {item.category === Categories.TO_DO ? null : (
                             <button
-                                onClick={() => changeCategory(toDo.id, 'DONE')}
+                                onClick={() =>
+                                    changeCategory(item.id, Categories.DONE)
+                                }
                             >
                                 DONE
                             </button>
                         )}
-                        {toDo.category === 'DOING' ? null : (
+                        {item.category === Categories.DOING ? null : (
                             <button
-                                onClick={() => changeCategory(toDo.id, 'DOING')}
+                                onClick={() =>
+                                    changeCategory(item.id, Categories.DOING)
+                                }
                             >
                                 DOING
                             </button>
                         )}
-                        {toDo.category === 'TO_DO' ? null : (
+                        {item.category === Categories.DONE ? null : (
                             <button
-                                onClick={() => changeCategory(toDo.id, 'TO_DO')}
+                                onClick={() =>
+                                    changeCategory(item.id, Categories.TO_DO)
+                                }
                             >
                                 TODO
                             </button>
