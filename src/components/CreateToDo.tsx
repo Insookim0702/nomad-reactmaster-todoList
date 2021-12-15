@@ -1,14 +1,13 @@
 import { useForm } from 'react-hook-form'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import styled from 'styled-components'
-import { atomToDoList, Categories, IForm, selectCategory } from '../Atom'
+import { atomToDoList, Categories, IForm, nowCategory } from '../Atom'
 
 const Input = styled.input`
     height: 30px;
     font-size: 20px;
-    width: 80%;
+    width: 78%;
     font-size: 30px;
-    color: #5352ed;
     border: none;
     -ms-user-select: none;
     -moz-user-select: -moz-none;
@@ -29,22 +28,25 @@ const Button = styled.button`
     height: 30px;
     background-color: transparent;
     font-size: 20px;
-    outline: none;
-    border: none;
-    color: white;
+    color: black;
 `
 const Select = styled.select`
     background-color: transparent;
     outline: none;
     border: none;
-    color: white;
+    color: black;
 `
 const From = styled.form`
     border-radius: 15px;
+    margin-top: 100px;
     padding: 5px 0;
     display: flex;
     justify-content: space-between;
-    background-color: #5352ed;
+    background-image: linear-gradient(
+        65deg,
+        rgb(17, 236, 229) 30%,
+        rgb(195, 27, 226) 114%
+    );
 `
 
 function CreateToDo () {
@@ -55,9 +57,15 @@ function CreateToDo () {
         reset
     } = useForm<IForm>()
 
-    const setToDoList = useSetRecoilState(atomToDoList)
-    const category = useRecoilValue(selectCategory)
+    const [toDoList, setToDoList] = useRecoilState(atomToDoList)
+    const category = useRecoilValue(nowCategory)
     function onValid (data: IForm) {
+        const temptToDoList = JSON.parse(JSON.stringify(toDoList))
+        temptToDoList.unshift({
+            toDo: data.toDo,
+            id: Number(new Date()),
+            category
+        })
         setToDoList(oldToDoList => {
             return [
                 {
@@ -68,11 +76,11 @@ function CreateToDo () {
                 ...oldToDoList
             ]
         })
+
+        localStorage.setItem('todoList', JSON.stringify(temptToDoList))
         reset({ toDo: '' })
     }
-    const [selectedCategory, setSelectedCategory] = useRecoilState(
-        selectCategory
-    )
+    const [selectedCategory, setSelectedCategory] = useRecoilState(nowCategory)
     function onInput (event: React.FormEvent<HTMLSelectElement>) {
         const {
             currentTarget: { value }

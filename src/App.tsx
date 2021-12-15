@@ -48,6 +48,15 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+button {
+	font-size: 40px;
+	background-color: transparent;
+	color: white;
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
 `
 function App () {
     return (
