@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled from 'styled-components'
-import { atomToDoList, Categories, nowCategory, selectedList } from '../Atom'
+import { atomToDoList, Categories, selectedList } from '../Atom'
 import Header from './Header'
 
 const ToDoListWrap = styled.ul`
