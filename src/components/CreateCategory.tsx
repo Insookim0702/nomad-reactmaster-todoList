@@ -34,9 +34,10 @@ function CreateCategory () {
     return (
         <>
             <Form onSubmit={handleSubmit(onSaveCategory)}>
-                <Title>Category Register</Title>
+                <Title>Category Create</Title>
                 <input
                     type='text'
+                    placeholder='custom category create.'
                     {...register('category', { required: 'input a category.' })}
                 />
                 <button>등록</button>
