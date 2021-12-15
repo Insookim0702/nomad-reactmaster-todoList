@@ -1,45 +1,30 @@
 import { useForm } from 'react-hook-form'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled from 'styled-components'
-import { atomToDoList, Categories, IForm, nowCategory } from '../Atom'
+import { atomToDoList, cateList, IForm, nowCategory } from '../Atom'
 
-const Input = styled.input`
-    height: 30px;
-    font-size: 20px;
-    width: 78%;
-    font-size: 30px;
-    border: none;
-    -ms-user-select: none;
-    -moz-user-select: -moz-none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-    &:focus {
-        outline: none;
-    }
-`
-const ErrMsg = styled.span`
+export const ErrMsg = styled.span`
     width: 100%;
     color: #fc427b;
     text-align: center;
     font-size: 20px;
 `
-const Button = styled.button`
-    height: 30px;
-    background-color: transparent;
-    font-size: 20px;
-    color: black;
-`
-const Select = styled.select`
-    background-color: transparent;
-    outline: none;
-    border: none;
-    color: black;
-`
-const From = styled.form`
+// const Button = styled.button`
+//     height: 30px;
+//     background-color: transparent;
+//     font-size: 20px;
+//     color: black;
+// `
+// const Select = styled.select`
+//     background-color: transparent;
+//     outline: none;
+//     border: none;
+//     color: black;
+// `
+export const Form = styled.form`
     border-radius: 15px;
     margin-top: 100px;
-    padding: 5px 0;
+    padding: 5px;
     display: flex;
     justify-content: space-between;
     background-image: linear-gradient(
@@ -47,6 +32,35 @@ const From = styled.form`
         rgb(17, 236, 229) 30%,
         rgb(195, 27, 226) 114%
     );
+    button {
+        height: 30px;
+        background-color: transparent;
+        font-size: 20px;
+        color: black;
+    }
+
+    select {
+        background-color: transparent;
+        outline: none;
+        border: none;
+        color: black;
+    }
+
+    input {
+        height: 30px;
+        font-size: 20px;
+        width: 78%;
+        font-size: 30px;
+        border: none;
+        -ms-user-select: none;
+        -moz-user-select: -moz-none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        &:focus {
+            outline: none;
+        }
+    }
 `
 
 function CreateToDo () {
@@ -56,9 +70,9 @@ function CreateToDo () {
         handleSubmit,
         reset
     } = useForm<IForm>()
-
-    const [toDoList, setToDoList] = useRecoilState(atomToDoList)
+    const categoryList = useRecoilValue(cateList)
     const category = useRecoilValue(nowCategory)
+    const [toDoList, setToDoList] = useRecoilState(atomToDoList)
     function onValid (data: IForm) {
         const temptToDoList = JSON.parse(JSON.stringify(toDoList))
         temptToDoList.unshift({
@@ -89,21 +103,24 @@ function CreateToDo () {
     }
     return (
         <>
-            <From onSubmit={handleSubmit(onValid)}>
-                <Select onInput={onInput} value={selectedCategory}>
-                    <option value={Categories.TO_DO}>TODO</option>
-                    <option value={Categories.DOING}>DOING</option>
-                    <option value={Categories.DONE}>DONE</option>
-                </Select>
-                <Input
+            <Form onSubmit={handleSubmit(onValid)}>
+                <select onInput={onInput} value={selectedCategory}>
+                    {categoryList.map((cate, idx) => {
+                        return (
+                            <option key={idx} value={cate}>
+                                {cate}
+                            </option>
+                        )
+                    })}
+                </select>
+                <input
                     type='text'
                     {...register('toDo', {
                         required: 'input a todo.'
                     })}
-                ></Input>
-
-                <Button>등록</Button>
-            </From>
+                ></input>
+                <button>등록</button>
+            </Form>
             <ErrMsg>{errors.toDo && errors.toDo.message}</ErrMsg>
         </>
     )
